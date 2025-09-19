@@ -110,7 +110,12 @@ def image():
     <img class="lab1" src="{img}" alt="Дуб">
 </body>
 </html>'''
-    return html
+    headers = {
+        'Content-Language': 'ru',
+        'X-Project': 'lab1',
+        'X-Author': 'Zubriczkii'
+    }
+    return html, 200, headers
 
 count = 0
 
