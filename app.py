@@ -1,4 +1,4 @@
-from flask import Flask, url_for, request, redirect, abort
+from flask import Flask, url_for, request, redirect, abort, render_template
 import datetime
 app = Flask(__name__)
 
@@ -315,7 +315,7 @@ def a():
 def a2():
     return 'со слэшем'
 
-flower_list = ('роза', 'тюльпан', 'незабудка', 'ромашка')
+flower_list = ['роза', 'тюльпан', 'незабудка', 'ромашка']
 
 @app.route('/lab2/flowers/<int:flower_id>')
 def flowers(flower_id):
@@ -338,3 +338,4 @@ def add_flower(name):
     <p>Полный список: {flower_list}</p>
     </body>
 </html>'''
+
