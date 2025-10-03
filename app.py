@@ -67,6 +67,7 @@ def index():
         <nav>
             <ul>
                 <li><a href="/lab1">Первая лабораторная</a></li>
+                <li><a href="/lab2">Вторая лабораторная</a></li>
             </ul>
         </nav>
         <footer>
@@ -475,3 +476,8 @@ cars = [
 @app.route('/lab2/cars')
 def cars_gallery():
     return render_template('cars.html', cars=cars)
+
+
+@app.route('/')
+def indexd():
+    return render_template('base.html')

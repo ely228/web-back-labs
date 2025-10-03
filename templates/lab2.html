@@ -1,15 +1,24 @@
 {% extends "base.html" %}
 
-{# номер лабораторной работы: #}
 {% block lab %}Лабораторная работа 2{% endblock %}
 
-{# основной конент: #}
 {% block main %}
-    <h1>Шаблоны</h1>
-    <div>Тема лабораторной - Шаблоны. Список сделанных страниц:</div>
-    <ol>
-        <li>
-            <a href="/lab2/example">example</a>
-        </li>
-    </ol>
+    <h1>Лабораторная работа №2</h1>
+    <div>Тема лабораторной — Шаблоны. Список сделанных страниц:</div>
+    <ul>
+        <li><a href="/lab2/flowers/">/lab2/flowers</a> — список всех цветов</li>
+        <li><a href="/lab2/flowers/0">/lab2/flowers/0</a> — информация о цветке</li>
+        <li><a href="/lab2/flowers/clear">/lab2/flowers/clear</a> — очистить список цветов</li>
+        <li><a href="/lab2/add_flower/rose">/lab2/add_flower/rose</a> — добавить цветок (пример)</li>
+
+        <li><a href="/lab2/calc/">/lab2/calc/</a> — калькулятор (по умолчанию 1 и 1)</li>
+        <li><a href="/lab2/calc/5/3">/lab2/calc/5/3</a> — калькулятор (пример 5 и 3)</li>
+
+        <li><a href="/lab2/example">/lab2/example</a> — пример шаблона</li>
+        <li><a href="/lab2/filters">/lab2/filters</a> — фильтры Jinja2</li>
+
+        <li><a href="/lab2/books">/lab2/books</a> — список книг</li>
+
+        <li><a href="/lab2/cars">/lab2/cars</a> — галерея автомобилей</li>
+    </ul>
 {% endblock %}
