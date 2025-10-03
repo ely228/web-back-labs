@@ -447,3 +447,31 @@ books = [
 @app.route('/lab2/books')
 def books_list():
     return render_template('books.html', books=books)
+
+
+cars = [
+    {"name": "BMW X5M", "desc": "BMW X5M", "img": "x5m.jpg"},
+    {"name": "BMW M5 F90", "desc": "BMW M5 F90", "img": "f90.jpg"},
+    {"name": "Hyundai Solaris", "desc": "Hyundai Solaris", "img": "solaris.jpg"},
+    {"name": "Kia Rio", "desc": "Kia Rio", "img": "kia_rio.jpg"},
+    {"name": "Volkswagen Polo", "desc": "Volkswagen Polo", "img": "polo.jpg"},
+    {"name": "Ford Focus", "desc": "Ford Focus", "img": "ford_focus.jpg"},
+    {"name": "Skoda Octavia", "desc": "Skoda Octavia", "img": "octavia.jpg"},
+    {"name": "BMW M4 F82", "desc": "BMW M4 F82", "img": "f82.jpg"},
+    {"name": "Haval Jolion", "desc": "Haval Jolion", "img": "haval_jolion.jpg"},
+    {"name": "Chery Tiggo 7 Pro", "desc": "Chery Tiggo 7 Pro", "img": "chery_tiggo7.jpg"},
+    {"name": "Geely Monjaro", "desc": "Geely Monjaro", "img": "geely_monjaro.jpg"},
+    {"name": "Changan Uni-S", "desc": "Changan Uni-S", "img": "changan.jpg"},
+    {"name": "Hyundai Creta", "desc": "Hyundai Creta", "img": "creta.jpg"},
+    {"name": "RR Wraith", "desc": "Rolls-Royce Wraith", "img": "wraith.jpg"},
+    {"name": "Toyota Camry", "desc": "Toyota Camry", "img": "camry.jpg"},
+    {"name": "Mercedes G63 AMG", "desc": "Mercedes G63 AMG", "img": "g63.jpg"},
+    {"name": "RR Cullinan", "desc": "Rolls-Royce Cullinan", "img": "cullinan.jpg"},
+    {"name": "Bentley Continental GT", "desc": "Bentley Continental GT", "img": "continental_gt.jpg"},
+    {"name": "Range Rover SVA", "desc": "Range Rover SVA Autobiography", "img": "sva.jpg"},
+    {"name": "Audi Q7", "desc": "Audi Q7", "img": "q7.jpg"},
+]
+
+@app.route('/lab2/cars')
+def cars_gallery():
+    return render_template('cars.html', cars=cars)
