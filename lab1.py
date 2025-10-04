@@ -104,7 +104,7 @@ def counter():
     time = datetime.datetime.today().strftime("%Y-%m-%d %H:%M:%S")
     url = request.url
     client_ip = request.remote_addr
-    clear_url = url_for('clear_counter')
+    clear_url = url_for('lab1.clear_counter')
     return f'''
 <!doctype html>
 <html>
@@ -124,7 +124,7 @@ def counter():
 def clear_counter():
     global count
     count = 0
-    return redirect(url_for('counter'))
+    return redirect(url_for('lab1.counter'))
 
 
 @lab1.route("/lab1/info")

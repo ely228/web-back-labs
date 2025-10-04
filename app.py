@@ -60,6 +60,10 @@ def not_found(err):
 </body>
 </html>''', 404
 
+
+journal = []
+
+
 @app.route('/')
 @app.route('/index')
 def index():
@@ -91,6 +95,7 @@ def index():
     </body>
 </html>
 ''',201
+
 
 @app.errorhandler(500)
 def handle_500(err):
