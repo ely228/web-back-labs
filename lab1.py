@@ -95,6 +95,7 @@ def image():
 
 count = 0
 
+journal = []
 
 @lab1.route('/lab1/counter')
 def counter():
@@ -143,3 +144,85 @@ def created():
 </html>
 ''',201
 
+@lab1.route("/400")
+def bad_request():
+    return '''<!doctype html>
+<html>
+<head>
+    <title>400 Bad Request</title>
+</head>
+<body>
+    <h1>400 Bad Request</h1>
+    <p>Сервер не может обработать запрос из-за синтаксической ошибки.</p>
+</body>
+</html>''', 400
+
+
+@lab1.route("/401")
+def unauthorized():
+    return '''<!doctype html>
+<html>
+<head>
+    <title>401 Unauthorized</title>
+</head>
+<body>
+    <h1>401 Unauthorized</h1>
+    <p>Для доступа к запрашиваемому ресурсу требуется аутентификация.</p>
+</body>
+</html>''', 401
+
+@lab1.route("/402")
+def payment_required():
+    return '''<!doctype html>
+<html>
+<head>
+    <title>402 Payment Required</title>
+</head>
+<body>
+    <h1>402 Payment Required</h1>
+    <p>Для доступа к ресурсу требуется оплата.</p>
+</body>
+</html>''', 402
+
+@lab1.route("/403")
+def forbidden():
+    return '''<!doctype html>
+<html>
+<head>
+    <title>403 Forbidden</title>
+</head>
+<body>
+    <h1>403 Forbidden</h1>
+    <p>Доступ к ресурсу запрещен.</p>
+</body>
+</html>''', 403
+
+@lab1.route("/405")
+def method_not_allowed():
+    return '''<!doctype html>
+<html>
+<head>
+    <title>405 Method Not Allowed</title>
+</head>
+<body>
+    <h1>405 Method Not Allowed</h1>
+    <p>Метод нельзя применить для данного ресурса.</p>
+</body>
+</html>''', 405
+
+@lab1.route("/418")
+def teapot():
+    return '''<!doctype html>
+<html>
+<head>
+    <title>418 I'm a teapot</title>
+</head>
+<body>
+    <h1>418 I'm a teapot</h1>
+    <p>Я чайник и не могу заваривать кофе.</p>
+</body>
+</html>''', 418
+
+@lab1.route('/cause_500')
+def cause_500():
+    raise RuntimeError("Ошибка для проверки 500")
