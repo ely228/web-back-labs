@@ -175,3 +175,67 @@ def clear_settings():
     resp.delete_cookie('font_size')
     resp.delete_cookie('font_style')
     return resp
+
+
+products = [
+    {"name": "BMW M3 G80", "price": 7890000, "weight": "1730 кг", "color": "синий"},
+    {"name": "BMW M5 F90", "price": 9890000, "weight": "1855 кг", "color": "черный"},
+    {"name": "BMW i4 M50", "price": 8690000, "weight": "2125 кг", "color": "белый"},
+    {"name": "Audi A6", "price": 5690000, "weight": "1650 кг", "color": "серебристый"},
+    {"name": "Audi S6", "price": 7490000, "weight": "1800 кг", "color": "черный"},
+    {"name": "Audi Q5", "price": 5290000, "weight": "1800 кг", "color": "белый"},
+    {"name": "Audi Q8", "price": 7990000, "weight": "2150 кг", "color": "серый"},
+    {"name": "Porsche Macan GTS", "price": 9490000, "weight": "1960 кг", "color": "зеленый"},
+    {"name": "Porsche Cayenne Turbo", "price": 12990000, "weight": "2250 кг", "color": "черный"},
+    {"name": "Porsche 911 Carrera", "price": 14990000, "weight": "1500 кг", "color": "желтый"},
+    {"name": "Lexus RX 350", "price": 6290000, "weight": "2000 кг", "color": "серебристый"},
+    {"name": "Lexus LX 600", "price": 12900000, "weight": "2600 кг", "color": "белый"},
+    {"name": "Toyota Land Cruiser 300", "price": 8990000, "weight": "2580 кг", "color": "черный"},
+    {"name": "Kia K5 GT", "price": 3490000, "weight": "1570 кг", "color": "синий"},
+    {"name": "Hyundai Tucson", "price": 2990000, "weight": "1580 кг", "color": "серый"},
+    {"name": "Mercedes-Benz C200", "price": 4990000, "weight": "1655 кг", "color": "синий"},
+    {"name": "Mercedes-Benz E300", "price": 6590000, "weight": "1780 кг", "color": "черный"},
+    {"name": "Mercedes-Benz GLE 450", "price": 9490000, "weight": "2185 кг", "color": "белый"},
+    {"name": "Mercedes-Benz GLS 600 Maybach", "price": 18500000, "weight": "2700 кг", "color": "золотой"},
+    {"name": "Mercedes-Benz AMG GT 63 S", "price": 16990000, "weight": "2045 кг", "color": "красный"},
+    {"name": "BMW X5 M Competition", "price": 11990000, "weight": "2300 кг", "color": "серый"},
+    {"name": "BMW X6 M50i", "price": 10790000, "weight": "2250 кг", "color": "красный"},
+    {"name": "Audi RS6 Avant", "price": 10990000, "weight": "2075 кг", "color": "красный"},
+]
+
+
+@lab3.route('/lab3/products')
+def products_page():
+    min_price_cookie = request.cookies.get('min_price')
+    max_price_cookie = request.cookies.get('max_price')
+    min_price = min(p["price"] for p in products)
+    max_price = max(p["price"] for p in products)
+
+    user_min = request.args.get('min_price', type=int) or (int(min_price_cookie) if min_price_cookie else min_price)
+    user_max = request.args.get('max_price', type=int) or (int(max_price_cookie) if max_price_cookie else max_price)
+
+    if user_min > user_max:
+        user_min, user_max = user_max, user_min
+
+    filtered = [p for p in products if user_min <= p["price"] <= user_max]
+
+    resp = make_response(render_template(
+        'lab3/products.html',
+        products=filtered,
+        count=len(filtered),
+        min_price=user_min,
+        max_price=user_max,
+        min_price_all=min_price,
+        max_price_all=max_price
+    ))
+
+    resp.set_cookie('min_price', str(user_min))
+    resp.set_cookie('max_price', str(user_max))
+
+    return resp
+
+@lab3.route('/lab3/products/reset')
+def reset_products():
+    resp = make_response(redirect('/lab3/products'))
+    resp.delete_cookie('min_price')
+    resp.delete_cookie('max_price')
