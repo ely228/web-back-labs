@@ -28,7 +28,7 @@ def all_flowers():
         flower_list.lab2end({"name": name, "price": int(price)})
         return redirect("/lab2/flowers/")
     
-    return render_template("flowers.html", flowers=flower_list)
+    return render_template("lab2/flowers.html", flowers=flower_list)
 
 @lab2.route('/lab2/add_flower/')
 def add_flower_no_name():
@@ -56,16 +56,16 @@ def example():
         {'name': 'мандарины', 'price': 95},
         {'name': 'манго', 'price': 321}
     ]
-    return render_template('example.html', name=name, number=number, group=group, course=course, fruits=fruits)
+    return render_template('lab2/example.html', name=name, number=number, group=group, course=course, fruits=fruits)
 
 @lab2.route('/lab2/')
 def labd(): 
-    return render_template('lab2.html')
+    return render_template('lab2/lab2.html')
 
 @lab2.route('/lab2/filters')
 def filters():
     phrase = "О <b>сколько</b> <u>нам</u> <i>открытий</i> чудных..."
-    return render_template('filter.html', phrase = phrase)
+    return render_template('lab2/filter.html', phrase = phrase)
 
 
 
@@ -113,35 +113,35 @@ books = [
 
 @lab2.route('/lab2/books')
 def books_list():
-    return render_template('books.html', books=books)
+    return render_template('lab2/books.html', books=books)
 
 
 cars = [
-    {"name": "BMW X5M", "desc": "BMW X5M", "img": "x5m.jpg"},
-    {"name": "BMW M5 F90", "desc": "BMW M5 F90", "img": "f90.jpg"},
-    {"name": "Hyundai Solaris", "desc": "Hyundai Solaris", "img": "solaris.jpg"},
-    {"name": "Kia Rio", "desc": "Kia Rio", "img": "kia_rio.jpg"},
-    {"name": "Volkswagen Polo", "desc": "Volkswagen Polo", "img": "polo.jpg"},
-    {"name": "Ford Focus", "desc": "Ford Focus", "img": "ford_focus.jpg"},
-    {"name": "Skoda Octavia", "desc": "Skoda Octavia", "img": "octavia.jpg"},
-    {"name": "BMW M4 F82", "desc": "BMW M4 F82", "img": "f82.jpg"},
-    {"name": "Haval Jolion", "desc": "Haval Jolion", "img": "haval_jolion.jpg"},
-    {"name": "Chery Tiggo 7 Pro", "desc": "Chery Tiggo 7 Pro", "img": "chery_tiggo7.jpg"},
-    {"name": "Geely Monjaro", "desc": "Geely Monjaro", "img": "geely_monjaro.jpg"},
-    {"name": "Changan Uni-S", "desc": "Changan Uni-S", "img": "changan.jpg"},
-    {"name": "Hyundai Creta", "desc": "Hyundai Creta", "img": "creta.jpg"},
-    {"name": "RR Wraith", "desc": "Rolls-Royce Wraith", "img": "wraith.jpg"},
-    {"name": "Toyota Camry", "desc": "Toyota Camry", "img": "camry.jpg"},
-    {"name": "Mercedes G63 AMG", "desc": "Mercedes G63 AMG", "img": "g63.jpg"},
-    {"name": "RR Cullinan", "desc": "Rolls-Royce Cullinan", "img": "cullinan.jpg"},
-    {"name": "Bentley Continental GT", "desc": "Bentley Continental GT", "img": "continental_gt.jpg"},
-    {"name": "Range Rover SVA", "desc": "Range Rover SVA Autobiography", "img": "sva.jpg"},
-    {"name": "Audi Q7", "desc": "Audi Q7", "img": "q7.jpg"},
+    {"name": "BMW X5M", "desc": "BMW X5M", "img": "lab2/x5m.jpg"},
+    {"name": "BMW M5 F90", "desc": "BMW M5 F90", "img": "lab2/f90.jpg"},
+    {"name": "Hyundai Solaris", "desc": "Hyundai Solaris", "img": "lab2/solaris.jpg"},
+    {"name": "Kia Rio", "desc": "Kia Rio", "img": "lab2/kia_rio.jpg"},
+    {"name": "Volkswagen Polo", "desc": "Volkswagen Polo", "img": "lab2/polo.jpg"},
+    {"name": "Ford Focus", "desc": "Ford Focus", "img": "lab2/ford_focus.jpg"},
+    {"name": "Skoda Octavia", "desc": "Skoda Octavia", "img": "lab2/octavia.jpg"},
+    {"name": "BMW M4 F82", "desc": "BMW M4 F82", "img": "lab2/f82.jpg"},
+    {"name": "Haval Jolion", "desc": "Haval Jolion", "img": "lab2/haval_jolion.jpg"},
+    {"name": "Chery Tiggo 7 Pro", "desc": "Chery Tiggo 7 Pro", "img": "lab2/chery_tiggo7.jpg"},
+    {"name": "Geely Monjaro", "desc": "Geely Monjaro", "img": "lab2/geely_monjaro.jpg"},
+    {"name": "Changan Uni-S", "desc": "Changan Uni-S", "img": "lab2/changan.jpg"},
+    {"name": "Hyundai Creta", "desc": "Hyundai Creta", "img": "lab2/creta.jpg"},
+    {"name": "RR Wraith", "desc": "Rolls-Royce Wraith", "img": "lab2/wraith.jpg"},
+    {"name": "Toyota Camry", "desc": "Toyota Camry", "img": "lab2/camry.jpg"},
+    {"name": "Mercedes G63 AMG", "desc": "Mercedes G63 AMG", "img": "lab2/g63.jpg"},
+    {"name": "RR Cullinan", "desc": "Rolls-Royce Cullinan", "img": "lab2/cullinan.jpg"},
+    {"name": "Bentley Continental GT", "desc": "Bentley Continental GT", "img": "lab2/continental_gt.jpg"},
+    {"name": "Range Rover SVA", "desc": "Range Rover SVA Autobiography", "img": "lab2/sva.jpg"},
+    {"name": "Audi Q7", "desc": "Audi Q7", "img": "lab2/q7.jpg"},
 ]
 
 @lab2.route('/lab2/cars')
 def cars_gallery():
-    return render_template('cars.html', cars=cars)
+    return render_template('lab2/cars.html', cars=cars)
 
 @lab2.route('/')
 def indexd():
