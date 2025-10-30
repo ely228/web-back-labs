@@ -65,7 +65,6 @@ def not_found(err):
 
 journal = []
 
-
 @app.route('/')
 @app.route('/index')
 def index():
