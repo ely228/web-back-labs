@@ -3,20 +3,34 @@
 {% block lab %}Лабораторная работа 5{% endblock %}
 
 {% block main %}
-    <h1>Редактирование статьи</h1>
-    <form method="post">
-        <div>
-            <label>Название статьи:</label>
-            <input type="text" maxlength="50" name="title" value="{{ article['title'] }}">
-        </div>
-        <div>
-            <label>Текст статьи:</label>
-            <textarea name="article_text">{{ article['article_text'] }}</textarea>
-        </div>
-        <button type="submit">Сохранить</button>
-    </form>
+<h1>Редактирование статьи</h1>
+<form method="post">
+    <div>
+        <label>Название статьи:</label>
+        <input type="text" maxlength="50" name="title" value="{{ article['title'] }}">
+    </div>
+    <div>
+        <label>Текст статьи:</label>
+        <textarea name="article_text">{{ article['article_text'] }}</textarea>
+    </div>
+    <div>
+        <label>
+            <input type="checkbox" name="is_favorite"
+                   {% if article['is_favorite'] %}checked{% endif %}>
+            Любимая статья
+        </label>
+    </div>
+    <div>
+        <label>
+            <input type="checkbox" name="is_public"
+                   {% if article['is_public'] %}checked{% endif %}>
+            Публичная статья
+        </label>
+    </div>
+    <button type="submit">Сохранить</button>
+</form>
 
-    {% if error %}
-        <div style="color:red;">{{ error }}</div>
-    {% endif %}
+{% if error %}
+    <div style="color:red;">{{ error }}</div>
+{% endif %}
 {% endblock %}
