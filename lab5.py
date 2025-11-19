@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, session, current_app
+from flask import Blueprint, render_template, request, session, current_app, redirect
 import psycopg2
 from psycopg2.extras import RealDictCursor
 from werkzeug.security import check_password_hash, generate_password_hash
