@@ -35,6 +35,8 @@ def lab():
 
 @lab6.route('/lab6/json-rpc-api', methods=['POST'])
 def api():
+    login = session.get('login')
+    total = 0
     data = request.json
     id = data['id']
     if data['method'] == 'info':
