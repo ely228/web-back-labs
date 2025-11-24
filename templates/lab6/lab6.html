@@ -20,13 +20,14 @@
             return response.json()
         })
         .then(function(data){
-            const office_list = data.result;
+            const office_list = data.result.offices;     
+            const total = data.result.total;  
             const ul = document.getElementById('office-list');
             ul.innerHTML = '';
             for(let i = 0; i < office_list.length; i++){
                 const office = office_list[i];
                 const li = document.createElement('li');
-                li.innerText = `${office.number}: ${office.tenant || 'Свободен'}`;
+                li.innerText = `${office.number}: ${office.tenant || 'Свободен'} | ${office.price} руб.`;
 
                 const bookingButton = document.createElement('button');
                 bookingButton.innerText = 'Зарезервировать';
@@ -40,6 +41,9 @@
 
                 ul.appendChild(li);
             }
+
+            document.getElementById('total').innerText =
+                `Суммарная стоимость аренды: ${total} руб.`;
         });
     }
 
@@ -60,18 +64,13 @@
         .then(function(response){
             return response.json()
         })
+        
         .then(function(data){
             if(data.error){
                 switch(data.error.code) {
-                    case 1:
-                        alert('Вы не авторизованы, пожалуйста, авторизуйтесь');
-                        break;
-                    case 2:
-                        alert('Офис уже арендуется');
-                        break;
-                    case -32601:
-                        alert('Странная ошибка');
-                        break;
+                    case 1: alert('Вы не авторизованы, пожалуйста, авторизуйтесь'); break;
+                    case 2: alert('Офис уже арендуется'); break;
+                    case -32601: alert('Странная ошибка'); break;
                 }
             }
             else {
@@ -101,18 +100,10 @@
         .then(function(data){
             if(data.error){
                 switch(data.error.code) {
-                    case 1:
-                        alert('Вы не авторизованы, пожалуйста, авторизуйтесь');
-                        break;
-                    case 3:
-                        alert('Офис не арендован');
-                        break;
-                    case 4:
-                        alert('Это не ваша аренда');
-                        break;
-                    case -32601:
-                        alert('Странная ошибка');
-                        break;
+                    case 1: alert('Вы не авторизованы, пожалуйста, авторизуйтесь'); break;
+                    case 3: alert('Офис не арендован'); break;
+                    case 4: alert('Это не ваша аренда'); break;
+                    case -32601: alert('Странная ошибка'); break;
                 }
             }
             else {
@@ -122,9 +113,9 @@
         });
     }
 
-document.addEventListener('DOMContentLoaded', function() {
-    getOfficeList();
-});
+    document.addEventListener('DOMContentLoaded', function() {
+        getOfficeList();
+    });
 
 </script>
 {% endblock %}
@@ -132,4 +123,5 @@ document.addEventListener('DOMContentLoaded', function() {
 {% block main %}
     <h1>Список кабинетов</h1>
     <ul id="office-list"></ul>
+<p id="total"></p>
 {% endblock %}
