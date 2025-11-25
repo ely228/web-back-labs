@@ -84,35 +84,35 @@ def index():
 <html>
     <head>
         <title>НГТУ, ФБ, Лабораторные работы</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='lab1/main.css') }}">
+        <link rel="icon" type="image/png" href="{{ url_for('static', filename='lab2/favicon.ico', v=2) }}">
     </head>
     <body>
-        <header><h1>НГТУ, ФБ, WEB-программирование, часть 2. Список лабораторных</h1></header>
-        <nav>
-            <ul>
-                <li><a href="/lab1">Первая лабораторная</a></li>
-                <li><a href="/lab2">Вторая лабораторная</a></li>
-                <li><a href="/lab3">Третья лабораторная</a></li>
-                <li><a href="/lab4">Четвертая лабораторная</a></li>
-                <li><a href="/lab5/">Пятая лабораторная</a></li>
-                <li><a href="/lab6">Шестая лабораторная</a></li>
-                <li><a href="/rgz/">РГЗ</a></li>
-            </ul>
-        </nav>
+        <header>
+            WEB-программирование, часть 2. Главная страница
+            <nav>
+                <a href="/">Главное меню</a>
+            </nav>
+        </header>
+        <main>
+            <h1>НГТУ, ФБ, Лабораторные работы</h1>
+            <nav>
+                <ul>
+                    <li><a href="/lab1">Первая лабораторная</a></li>
+                    <li><a href="/lab2">Вторая лабораторная</a></li>
+                    <li><a href="/lab3">Третья лабораторная</a></li>
+                    <li><a href="/lab4">Четвертая лабораторная</a></li>
+                    <li><a href="/lab5/">Пятая лабораторная</a></li>
+                    <li><a href="/lab6">Шестая лабораторная</a></li>
+                    <li><a href="/rgz/">РГЗ</a></li>
+                </ul>
+            </nav>
+        </main>
         <footer>
-            <p>Зубрицкий Илья Сергеевич, ФБИ-34, 3 курс, 2025</p>
+            &copy; Зубрицкий Илья, ФБИ-34, 3 курс, 2025
         </footer>
     </body>
 </html>'''
-
-    return '''
-<!doctype html"
-<html>
-    <body>
-        <h1>Создано успешно</h1>
-        <div><i>что-то создано...</i></div>
-    </body>
-</html>
-''',201
 
 
 @app.errorhandler(500)
