@@ -1,0 +1,372 @@
+/* Основные стили для РГЗ */
+.rgz-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+
+.rgz-header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding: 20px;
+    background: #2c3e50;
+    color: white;
+    border-radius: 8px;
+}
+
+.rgz-header h1 {
+    margin: 0 0 10px 0;
+    font-size: 2rem;
+}
+
+.rgz-header p {
+    margin: 0;
+    opacity: 0.9;
+}
+
+/* Карточки */
+.card {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    border: 1px solid #ddd;
+}
+
+.card h2 {
+    margin: 0 0 20px 0;
+    color: #2c3e50;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 10px;
+}
+
+.card h3 {
+    margin: 0 0 15px 0;
+    color: #2c3e50;
+}
+
+/* Формы */
+input, textarea {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+textarea {
+    height: 100px;
+    resize: vertical;
+}
+
+/* Кнопки */
+button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    margin: 5px 0;
+    font-family: Arial, sans-serif;
+}
+
+.btn-primary {
+    background: #3498db;
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #2980b9;
+}
+
+.btn-secondary {
+    background: #95a5a6;
+    color: white;
+}
+
+.btn-secondary:hover {
+    background: #7f8c8d;
+}
+
+.btn-success {
+    background: #27ae60;
+    color: white;
+}
+
+.btn-success:hover {
+    background: #229954;
+}
+
+.btn-outline {
+    background: transparent;
+    color: #3498db;
+    border: 1px solid #3498db;
+}
+
+.btn-outline:hover {
+    background: #3498db;
+    color: white;
+}
+
+.btn-admin {
+    background: #e74c3c;
+    color: white;
+}
+
+.btn-admin:hover {
+    background: #c0392b;
+}
+
+.btn-load {
+    background: #95a5a6;
+    color: white;
+    width: 200px;
+}
+
+.btn-load:hover {
+    background: #7f8c8d;
+}
+
+.btn-delete {
+    background: #e74c3c;
+    color: white;
+    padding: 5px 10px;
+    font-size: 12px;
+}
+
+.btn-delete:hover {
+    background: #c0392b;
+}
+
+/* Секция авторизации */
+.auth-forms {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.auth-card {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    border: 1px solid #ddd;
+}
+
+/* Панель пользователя */
+.user-panel {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    border: 1px solid #ddd;
+}
+
+.user-info h3 {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.admin-badge {
+    background: #e74c3c;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.user-actions {
+    display: flex;
+    gap: 10px;
+}
+
+/* Стили для кнопки панели администратора */
+.btn-admin-panel {
+    background: #e74c3c;
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 4px;
+    display: inline-block;
+    font-weight: bold;
+    border: 1px solid #e74c3c;
+}
+
+.btn-admin-panel:hover {
+    background: #c0392b;
+    border-color: #c0392b;
+}
+
+/* Инициативы */
+.initiatives-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.initiative-item {
+    background: white;
+    padding: 15px;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.my-initiative {
+    border-left: 4px solid #3498db;
+}
+
+.initiative-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 10px;
+}
+
+.initiative-header h4 {
+    margin: 0;
+    color: #2c3e50;
+    flex: 1;
+    margin-right: 15px;
+}
+
+.votes {
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-weight: bold;
+    font-size: 12px;
+    min-width: 30px;
+    text-align: center;
+}
+
+.votes.positive {
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.votes.negative {
+    background: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.initiative-item p {
+    margin: 0 0 10px 0;
+    color: #555;
+    line-height: 1.4;
+}
+
+.initiative-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 10px;
+    border-top: 1px solid #eee;
+}
+
+.meta {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.author {
+    font-weight: bold;
+    font-size: 12px;
+    color: #333;
+}
+
+.date {
+    font-size: 11px;
+    color: #777;
+}
+
+.vote-buttons {
+    display: flex;
+    gap: 5px;
+}
+
+.btn-vote {
+    padding: 5px 10px;
+    font-size: 12px;
+    border-radius: 3px;
+    border: 1px solid transparent;
+}
+
+.btn-vote.up {
+    background: #27ae60;
+    color: white;
+    border-color: #229954;
+}
+
+.btn-vote.up:hover {
+    background: #229954;
+}
+
+.btn-vote.down {
+    background: #e74c3c;
+    color: white;
+    border-color: #c0392b;
+}
+
+.btn-vote.down:hover {
+    background: #c0392b;
+}
+
+/* Загрузка еще */
+.load-more {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.empty {
+    text-align: center;
+    color: #777;
+    padding: 20px;
+    font-style: italic;
+}
+
+/* Стили для админской панели */
+.admin-sections {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.user-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    background: white;
+}
+
+.user-info-small {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.user-info-small small {
+    color: #777;
+}
+
+.admin-initiative {
+    border-left: 4px solid #e74c3c;
+}

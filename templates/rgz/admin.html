@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Зубрицкий Илья. РГЗ - Админ</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='lab1/main.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='rgz/rgz.css') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='lab2/favicon.ico', v=2) }}">
+</head>
+
+<body>
+    <header>
+        WEB-программирование, часть 2. РГЗ - Панель администратора
+        <nav>
+            <a href="{{ url_for('index') }}">Главное меню</a>
+            <a href="{{ url_for('rgz.rgz_index') }}">Назад к инициативам</a>
+        </nav>
+    </header>
+    
+    <main>
+        <div class="rgz-container">
+            <div class="rgz-header">
+                <h1>Панель администратора</h1>
+                <p>Управление пользователями и инициативами</p>
+            </div>
+
+            <div class="admin-sections">
+                <div class="admin-section">
+                    <div class="card">
+                        <h2>Управление пользователями</h2>
+                        <div id="users-list" class="users-list"></div>
+                    </div>
+                </div>
+
+                <div class="admin-section">
+                    <div class="card">
+                        <h2>Управление инициативами</h2>
+                        <div id="admin-initiatives-list" class="initiatives-list"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <footer>
+        &copy; Зубрицкий Илья, ФБИ-34, 3 курс, 2025
+    </footer>
+
+    <script>
+    // JSON-RPC клиент
+    async function jsonrpcCall(method, params = {}) {
+        const response = await fetch('/rgz/api', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                jsonrpc: '2.0',
+                method: method,
+                params: params,
+                id: Date.now()
+            })
+        });
+        
+        const data = await response.json();
+        
+        if (data.error) {
+            throw new Error(data.error.message);
+        }
+        
+        return data.result;
+    }
+
+    // Загрузка пользователей
+    async function loadUsers() {
+        try {
+            const result = await jsonrpcCall('get_users');
+            const container = document.getElementById('users-list');
+            
+            container.innerHTML = '';
+            
+            if (result.users.length === 0) {
+                container.innerHTML = '<div class="empty">Пользователей нет</div>';
+                return;
+            }
+            
+            result.users.forEach(user => {
+                const userElement = document.createElement('div');
+                userElement.className = 'user-item';
+                userElement.innerHTML = `
+                    <div class="user-info">
+                        <strong>${escapeHtml(user.username)}</strong>
+                        ${user.is_admin ? '<span class="admin-badge">Админ</span>' : ''}
+                        <small>ID: ${user.id}</small>
+                    </div>
+                    ${!user.is_admin ? `
+                    <button onclick="deleteUser(${user.id}, '${escapeHtml(user.username)}')" class="btn-delete">
+                        Удалить
+                    </button>
+                    ` : ''}
+                `;
+                container.appendChild(userElement);
+            });
+            
+        } catch (error) {
+            alert('Ошибка загрузки пользователей: ' + error.message);
+        }
+    }
+
+    // Загрузка инициатив для админа
+    async function loadAdminInitiatives() {
+        try {
+            const result = await jsonrpcCall('get_initiatives', { page: 1 });
+            const container = document.getElementById('admin-initiatives-list');
+            
+            container.innerHTML = '';
+            
+            if (result.initiatives.length === 0) {
+                container.innerHTML = '<div class="empty">Инициатив нет</div>';
+                return;
+            }
+            
+            result.initiatives.forEach(init => {
+                const initElement = document.createElement('div');
+                initElement.className = 'initiative-item admin-initiative';
+                initElement.innerHTML = `
+                    <div class="initiative-header">
+                        <h4>${escapeHtml(init.title)}</h4>
+                        <div class="votes ${init.votes >= 0 ? 'positive' : 'negative'}">${init.votes}</div>
+                    </div>
+                    <p>${escapeHtml(init.text)}</p>
+                    <div class="initiative-footer">
+                        <div class="meta">
+                            <span class="author">Автор: ${escapeHtml(init.author)}</span>
+                            <span class="date">${init.date}</span>
+                        </div>
+                        <button onclick="deleteInitiativeAdmin(${init.id}, '${escapeHtml(init.title)}')" class="btn-delete">
+                            Удалить
+                        </button>
+                    </div>
+                `;
+                container.appendChild(initElement);
+            });
+            
+        } catch (error) {
+            alert('Ошибка загрузки инициатив: ' + error.message);
+        }
+    }
+
+    // Удаление пользователя
+    async function deleteUser(userId, username) {
+        if (!confirm(`Удалить пользователя "${username}"? Все его инициативы также будут удалены.`)) return;
+        
+        try {
+            await jsonrpcCall('delete_user', { id: userId });
+            await loadUsers();
+            alert('Пользователь удален успешно');
+        } catch (error) {
+            alert('Ошибка: ' + error.message);
+        }
+    }
+
+    // Удаление инициативы админом
+    async function deleteInitiativeAdmin(initId, title) {
+        if (!confirm(`Удалить инициативу "${title}"?`)) return;
+        
+        try {
+            await jsonrpcCall('delete_initiative_admin', { id: initId });
+            await loadAdminInitiatives();
+            alert('Инициатива удалена успешно');
+        } catch (error) {
+            alert('Ошибка: ' + error.message);
+        }
+    }
+
+    // Вспомогательная функция
+    function escapeHtml(unsafe) {
+        if (!unsafe) return '';
+        return unsafe
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
+
+    // Инициализация
+    document.addEventListener('DOMContentLoaded', function() {
+        loadUsers();
+        loadAdminInitiatives();
+    });
+    </script>
+
+    <style>
+    .admin-sections {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
+
+    .user-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        margin-bottom: 10px;
+        background: white;
+    }
+
+    .user-info {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .user-info small {
+        color: #777;
+    }
+
+    .admin-initiative {
+        border-left: 4px solid #e74c3c;
+    }
+
+    @media (max-width: 768px) {
+        .admin-sections {
+            grid-template-columns: 1fr;
+        }
+    }
+    </style>
+</body>
+</html>

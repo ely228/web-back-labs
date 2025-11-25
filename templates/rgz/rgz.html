@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Зубрицкий Илья. РГЗ</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='lab1/main.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='rgz/rgz.css') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='lab2/favicon.ico', v=2) }}">
+</head>
+
+<body>
+    <header>
+        WEB-программирование, часть 2. РГЗ
+        <nav>
+            <a href="{{ url_for('index') }}">Главное меню</a>
+        </nav>
+    </header>
+    
+    <main>
+        <div class="rgz-container">
+            <div class="rgz-header">
+                <h1>Платформа Инициатив</h1>
+                <p>Предлагайте идеи и голосуйте за лучшие предложения</p>
+            </div>
+
+            <div class="auth-section">
+                {% if 'user_id' not in session %}
+                <div class="auth-forms">
+                    <div class="auth-card">
+                        <h3>Вход в систему</h3>
+                        <input type="text" id="login-username" placeholder="Логин">
+                        <input type="password" id="login-password" placeholder="Пароль">
+                        <button onclick="login()" class="btn-primary">Войти</button>
+                    </div>
+
+                    <div class="auth-card">
+                        <h3>Регистрация</h3>
+                        <input type="text" id="reg-username" placeholder="Логин">
+                        <input type="password" id="reg-password" placeholder="Пароль">
+                        <button onclick="register()" class="btn-secondary">Зарегистрироваться</button>
+                    </div>
+                </div>
+                {% else %}
+                <div class="user-panel">
+                <div class="user-info">
+                    <h3>Добро пожаловать, {{ session['username'] }}!</h3>
+                    {% if session.get('is_admin') %}
+                    <span class="admin-badge">Администратор</span>
+                    {% endif %}
+                </div>
+                <div class="user-actions">
+                    <button onclick="logout()" class="btn-outline">Выйти</button>
+                    {% if session.get('is_admin') %}
+                    <a href="{{ url_for('rgz.rgz_admin') }}" class="btn-admin-panel">
+                        Панель администратора
+                    </a>
+                    {% endif %}
+                </div>
+                </div>
+
+                <div class="create-section">
+                    <div class="card">
+                        <h3>Создать новую инициативу</h3>
+                        <input type="text" id="init-title" placeholder="Название инициативы">
+                        <textarea id="init-text" placeholder="Подробное описание инициативы"></textarea>
+                        <button onclick="createInitiative()" class="btn-success">Опубликовать</button>
+                    </div>
+                </div>
+
+                <div class="my-initiatives">
+                    <div class="card">
+                        <h3>Мои инициативы</h3>
+                        <div id="my-initiatives-list" class="initiatives-list"></div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="initiatives-section">
+                <div class="card">
+                    <h2>Все инициативы</h2>
+                    <div id="initiatives-container" class="initiatives-list"></div>
+                    <div class="load-more">
+                        <button id="load-more" onclick="loadMoreInitiatives()" class="btn-load">Показать еще</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <footer>
+        &copy; Зубрицкий Илья, ФБИ-34, 3 курс, 2025
+    </footer>
+
+    <script>
+    // Глобальные переменные
+    let currentPage = 1;
+
+    // JSON-RPC клиент
+    async function jsonrpcCall(method, params = {}) {
+        const response = await fetch('/rgz/api', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                jsonrpc: '2.0',
+                method: method,
+                params: params,
+                id: Date.now()
+            })
+        });
+        
+        const data = await response.json();
+        
+        if (data.error) {
+            throw new Error(data.error.message);
+        }
+        
+        return data.result;
+    }
+
+    // Функции авторизации
+    async function login() {
+        const username = document.getElementById('login-username').value;
+        const password = document.getElementById('login-password').value;
+        
+        if (!username || !password) {
+            alert('Заполните все поля');
+            return;
+        }
+        
+        try {
+            await jsonrpcCall('login', { username, password });
+            location.reload();
+        } catch (error) {
+            alert('Ошибка: ' + error.message);
+        }
+    }
+
+    async function register() {
+        const username = document.getElementById('reg-username').value;
+        const password = document.getElementById('reg-password').value;
+        
+        if (!username || !password) {
+            alert('Заполните все поля');
+            return;
+        }
+        
+        try {
+            await jsonrpcCall('register', { username, password });
+            alert('Регистрация успешна! Теперь войдите в систему.');
+            document.getElementById('reg-username').value = '';
+            document.getElementById('reg-password').value = '';
+        } catch (error) {
+            alert('Ошибка: ' + error.message);
+        }
+    }
+
+    async function logout() {
+        try {
+            await jsonrpcCall('logout');
+            location.reload();
+        } catch (error) {
+            alert('Ошибка: ' + error.message);
+        }
+    }
+
+    // Работа с инициативами
+    async function loadInitiatives(page = 1) {
+        try {
+            const result = await jsonrpcCall('get_initiatives', { page });
+            displayInitiatives(result.initiatives, page === 1);
+            
+            const loadMoreBtn = document.getElementById('load-more');
+            loadMoreBtn.style.display = result.has_more ? 'block' : 'none';
+            
+            currentPage = page;
+            
+        } catch (error) {
+            console.error('Ошибка загрузки инициатив:', error);
+            alert('Ошибка загрузки инициатив: ' + error.message);
+        }
+    }
+
+    function displayInitiatives(initiatives, clearContainer = true) {
+        const container = document.getElementById('initiatives-container');
+        
+        if (clearContainer) {
+            container.innerHTML = '';
+        }
+        
+        if (initiatives.length === 0) {
+            container.innerHTML = '<div class="empty">Инициатив пока нет</div>';
+            return;
+        }
+        
+        initiatives.forEach(init => {
+            const initElement = document.createElement('div');
+            initElement.className = 'initiative-item';
+            initElement.innerHTML = `
+                <div class="initiative-header">
+                    <h4>${escapeHtml(init.title)}</h4>
+                    <div class="votes ${init.votes >= 0 ? 'positive' : 'negative'}">${init.votes}</div>
+                </div>
+                <p>${escapeHtml(init.text)}</p>
+                <div class="initiative-footer">
+                    <div class="meta">
+                        <span class="author">Автор: ${escapeHtml(init.author)}</span>
+                        <span class="date">${init.date}</span>
+                    </div>
+                    {% if 'user_id' in session %}
+                    <div class="vote-buttons">
+                        <button onclick="vote(${init.id}, 'up')" class="btn-vote up">За</button>
+                        <button onclick="vote(${init.id}, 'down')" class="btn-vote down">Против</button>
+                    </div>
+                    {% endif %}
+                </div>
+            `;
+            container.appendChild(initElement);
+        });
+    }
+
+    async function loadMoreInitiatives() {
+        await loadInitiatives(currentPage + 1);
+    }
+
+    async function createInitiative() {
+        const title = document.getElementById('init-title').value;
+        const text = document.getElementById('init-text').value;
+        
+        if (!title || !text) {
+            alert('Заполните все поля');
+            return;
+        }
+        
+        try {
+            await jsonrpcCall('create_initiative', { title, text });
+            document.getElementById('init-title').value = '';
+            document.getElementById('init-text').value = '';
+            await loadInitiatives(1);
+            await loadMyInitiatives();
+            alert('Инициатива создана успешно!');
+        } catch (error) {
+            alert('Ошибка: ' + error.message);
+        }
+    }
+
+    async function deleteInitiative(id) {
+        if (!confirm('Удалить эту инициативу?')) return;
+        
+        try {
+            await jsonrpcCall('delete_initiative', { id });
+            await loadInitiatives(1);
+            await loadMyInitiatives();
+            alert('Инициатива удалена успешно!');
+        } catch (error) {
+            alert('Ошибка: ' + error.message);
+        }
+    }
+
+    async function vote(initiativeId, type) {
+        try {
+            await jsonrpcCall('vote', { initiative_id: initiativeId, type });
+            await loadInitiatives(currentPage);
+            alert('Голос учтен!');
+        } catch (error) {
+            alert('Ошибка: ' + error.message);
+        }
+    }
+
+    async function loadMyInitiatives() {
+        if (!{{ 'true' if 'user_id' in session else 'false' }}) return;
+        
+        try {
+            const result = await jsonrpcCall('get_my_initiatives');
+            const container = document.getElementById('my-initiatives-list');
+            
+            container.innerHTML = '';
+            
+            if (result.initiatives.length === 0) {
+                container.innerHTML = '<div class="empty">У вас пока нет инициатив</div>';
+                return;
+            }
+            
+            result.initiatives.forEach(init => {
+                const initElement = document.createElement('div');
+                initElement.className = 'initiative-item my-initiative';
+                initElement.innerHTML = `
+                    <div class="initiative-header">
+                        <h4>${escapeHtml(init.title)}</h4>
+                        <div class="votes ${init.votes >= 0 ? 'positive' : 'negative'}">${init.votes}</div>
+                    </div>
+                    <p>${escapeHtml(init.text)}</p>
+                    <div class="initiative-footer">
+                        <div class="meta">
+                            <span class="date">${init.date}</span>
+                        </div>
+                        <button onclick="deleteInitiative(${init.id})" class="btn-delete">Удалить</button>
+                    </div>
+                `;
+                container.appendChild(initElement);
+            });
+            
+        } catch (error) {
+            console.error('Ошибка загрузки моих инициатив:', error);
+        }
+    }
+
+    // Вспомогательные функции
+    function escapeHtml(unsafe) {
+        if (!unsafe) return '';
+        return unsafe
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
+
+    // Инициализация
+    document.addEventListener('DOMContentLoaded', function() {
+        loadInitiatives(1);
+        {% if 'user_id' in session %}
+        loadMyInitiatives();
+        {% endif %}
+    });
+    </script>
+</body>
+</html>
+
+
+
+
