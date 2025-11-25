@@ -48,7 +48,6 @@
     </footer>
 
     <script>
-    // JSON-RPC клиент
     async function jsonrpcCall(method, params = {}) {
         const response = await fetch('/rgz/api', {
             method: 'POST',
@@ -72,7 +71,6 @@
         return data.result;
     }
 
-    // Загрузка пользователей
     async function loadUsers() {
         try {
             const result = await jsonrpcCall('get_users');
@@ -108,7 +106,6 @@
         }
     }
 
-    // Загрузка инициатив для админа
     async function loadAdminInitiatives() {
         try {
             const result = await jsonrpcCall('get_initiatives', { page: 1 });
@@ -148,7 +145,6 @@
         }
     }
 
-    // Удаление пользователя
     async function deleteUser(userId, username) {
         if (!confirm(`Удалить пользователя "${username}"? Все его инициативы также будут удалены.`)) return;
         
@@ -161,7 +157,6 @@
         }
     }
 
-    // Удаление инициативы админом
     async function deleteInitiativeAdmin(initId, title) {
         if (!confirm(`Удалить инициативу "${title}"?`)) return;
         
@@ -174,7 +169,6 @@
         }
     }
 
-    // Вспомогательная функция
     function escapeHtml(unsafe) {
         if (!unsafe) return '';
         return unsafe
@@ -185,7 +179,6 @@
             .replace(/'/g, "&#039;");
     }
 
-    // Инициализация
     document.addEventListener('DOMContentLoaded', function() {
         loadUsers();
         loadAdminInitiatives();

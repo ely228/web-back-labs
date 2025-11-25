@@ -1,4 +1,3 @@
-/* Основные стили для РГЗ */
 .rgz-container {
     max-width: 1200px;
     margin: 0 auto;
@@ -25,7 +24,6 @@
     opacity: 0.9;
 }
 
-/* Карточки */
 .card {
     background: white;
     border-radius: 8px;
@@ -47,7 +45,6 @@
     color: #2c3e50;
 }
 
-/* Формы */
 input, textarea {
     width: 100%;
     padding: 10px;
@@ -63,7 +60,6 @@ textarea {
     resize: vertical;
 }
 
-/* Кнопки */
 button {
     padding: 10px 20px;
     border: none;
@@ -142,7 +138,6 @@ button {
     background: #c0392b;
 }
 
-/* Секция авторизации */
 .auth-forms {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -158,7 +153,6 @@ button {
     border: 1px solid #ddd;
 }
 
-/* Панель пользователя */
 .user-panel {
     background: white;
     padding: 20px;
@@ -192,7 +186,6 @@ button {
     gap: 10px;
 }
 
-/* Стили для кнопки панели администратора */
 .btn-admin-panel {
     background: #e74c3c;
     color: white;
@@ -209,7 +202,6 @@ button {
     border-color: #c0392b;
 }
 
-/* Инициативы */
 .initiatives-list {
     display: flex;
     flex-direction: column;
@@ -326,7 +318,6 @@ button {
     background: #c0392b;
 }
 
-/* Загрузка еще */
 .load-more {
     text-align: center;
     margin-top: 20px;
@@ -339,7 +330,6 @@ button {
     font-style: italic;
 }
 
-/* Стили для админской панели */
 .admin-sections {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -369,4 +359,47 @@ button {
 
 .admin-initiative {
     border-left: 4px solid #e74c3c;
+}
+
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    width: 90%;
+    margin: auto;
+    position: relative;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+    justify-content: flex-end;
+}
+
+.warning-text {
+    color: #e74c3c;
+    font-size: 14px;
+    margin: 10px 0;
+    font-weight: bold;
+    background: #fdf2f2;
+    padding: 10px;
+    border-radius: 4px;
+    border-left: 3px solid #e74c3c;
 }

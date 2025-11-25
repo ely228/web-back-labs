@@ -9,12 +9,10 @@ import random
 rgz = Blueprint('rgz', __name__, url_prefix='/rgz')
 DB_PATH = os.path.join(os.path.dirname(__file__), "rgz.db")
 
-# --- Создание БД и таблиц ---
 def init_db():
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
     
-    # Пользователи
     c.execute('''
         CREATE TABLE IF NOT EXISTS users (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -24,7 +22,6 @@ def init_db():
         )
     ''')
     
-    # Инициативы
     c.execute('''
         CREATE TABLE IF NOT EXISTS initiatives (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -37,7 +34,6 @@ def init_db():
         )
     ''')
     
-    # Голоса
     c.execute('''
         CREATE TABLE IF NOT EXISTS votes (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -50,13 +46,11 @@ def init_db():
         )
     ''')
     
-    # Создаем администратора если его нет
     admin = c.execute("SELECT * FROM users WHERE username='admin'").fetchone()
     if not admin:
         c.execute("INSERT INTO users (username, password, is_admin) VALUES (?, ?, ?)",
                  ('admin', generate_password_hash('admin123'), 1))
     
-    # Создаем тестовые инициативы (более 100)
     init_count = c.execute("SELECT COUNT(*) FROM initiatives").fetchone()[0]
     if init_count < 100:
         users = c.execute("SELECT id FROM users").fetchall()
@@ -101,7 +95,6 @@ def init_db():
 
 init_db()
 
-# --- Вспомогательные функции ---
 def get_user_by_username(username):
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
@@ -137,7 +130,6 @@ def get_all_users():
     conn.close()
     return users
 
-# --- JSON-RPC API ---
 class JSONRPCException(Exception):
     def __init__(self, code, message, data=None):
         self.code = code
@@ -187,6 +179,8 @@ def handle_jsonrpc_request():
             result = api_delete_user(params)
         elif method == 'delete_initiative_admin':
             result = api_delete_initiative_admin(params)
+        elif method == 'delete_my_account':
+            result = api_delete_my_account(params)
         else:
             raise JSONRPCException(-32601, "Method not found")
         
@@ -197,7 +191,6 @@ def handle_jsonrpc_request():
     except Exception as e:
         return jsonrpc_response(error={"code": -32603, "message": "Internal error", "data": str(e)}, id=request_id)
 
-# --- API методы ---
 def api_register(params):
     username = params.get('username')
     password = params.get('password')
@@ -411,7 +404,35 @@ def api_delete_initiative_admin(params):
     
     return {"message": "Initiative deleted successfully"}
 
-# --- Маршруты ---
+def api_delete_my_account(params):
+    if 'user_id' not in session:
+        raise JSONRPCException(-32002, "Authentication required")
+    
+    password = params.get('password')
+    
+    if not password:
+        raise JSONRPCException(-32602, "Invalid params", "Password required")
+    
+    user = get_user_by_username(session['username'])
+    if not user or not check_password_hash(user[2], password):
+        raise JSONRPCException(-32001, "Invalid password")
+    
+    user_id = session['user_id']
+    
+    conn = sqlite3.connect(DB_PATH)
+    c = conn.cursor()
+    
+    c.execute("DELETE FROM initiatives WHERE author_id = ?", (user_id,))
+    c.execute("DELETE FROM votes WHERE user_id = ?", (user_id,))
+    c.execute("DELETE FROM users WHERE id = ?", (user_id,))
+    
+    conn.commit()
+    conn.close()
+    
+    session.clear()
+    
+    return {"message": "Account deleted successfully"}
+
 @rgz.route('/api', methods=['POST'])
 def rgz_api():
     return handle_jsonrpc_request()

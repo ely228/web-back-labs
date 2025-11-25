@@ -11,7 +11,7 @@
 
 <body>
     <header>
-        WEB-программирование, часть 2. РГЗ
+        WEB-программирование, часть 2. РГЗ. Зубрицкий И.
         <nav>
             <a href="{{ url_for('index') }}">Главное меню</a>
         </nav>
@@ -43,20 +43,34 @@
                 </div>
                 {% else %}
                 <div class="user-panel">
-                <div class="user-info">
-                    <h3>Добро пожаловать, {{ session['username'] }}!</h3>
-                    {% if session.get('is_admin') %}
-                    <span class="admin-badge">Администратор</span>
-                    {% endif %}
+                    <div class="user-info">
+                        <h3>Добро пожаловать, {{ session['username'] }}!</h3>
+                        {% if session.get('is_admin') %}
+                        <span class="admin-badge">Администратор</span>
+                        {% endif %}
+                    </div>
+                    <div class="user-actions">
+                        <button onclick="showDeleteAccountModal()" class="btn-danger">Удалить мой аккаунт</button>
+                        <button onclick="logout()" class="btn-outline">Выйти</button>
+                        {% if session.get('is_admin') %}
+                        <a href="{{ url_for('rgz.rgz_admin') }}" class="btn-admin-panel">
+                            Панель администратора
+                        </a>
+                        {% endif %}
+                    </div>
                 </div>
-                <div class="user-actions">
-                    <button onclick="logout()" class="btn-outline">Выйти</button>
-                    {% if session.get('is_admin') %}
-                    <a href="{{ url_for('rgz.rgz_admin') }}" class="btn-admin-panel">
-                        Панель администратора
-                    </a>
-                    {% endif %}
-                </div>
+
+                <div id="deleteAccountModal" class="modal" style="display: none;">
+                    <div class="modal-content">
+                        <h3>Удаление аккаунта</h3>
+                        <p>Введите ваш пароль для подтверждения удаления аккаунта:</p>
+                        <input type="password" id="delete-password" placeholder="Ваш пароль" class="form-input">
+                        <p class="warning-text">Внимание: это действие невозможно отменить! Все ваши инициативы и данные будут безвозвратно удалены.</p>
+                        <div class="modal-actions">
+                            <button onclick="deleteMyAccount()" class="btn-danger">Удалить аккаунт</button>
+                            <button onclick="hideDeleteAccountModal()" class="btn-outline">Отмена</button>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="create-section">
@@ -94,10 +108,8 @@
     </footer>
 
     <script>
-    // Глобальные переменные
     let currentPage = 1;
 
-    // JSON-RPC клиент
     async function jsonrpcCall(method, params = {}) {
         const response = await fetch('/rgz/api', {
             method: 'POST',
@@ -121,7 +133,6 @@
         return data.result;
     }
 
-    // Функции авторизации
     async function login() {
         const username = document.getElementById('login-username').value;
         const password = document.getElementById('login-password').value;
@@ -167,7 +178,6 @@
         }
     }
 
-    // Работа с инициативами
     async function loadInitiatives(page = 1) {
         try {
             const result = await jsonrpcCall('get_initiatives', { page });
@@ -308,7 +318,6 @@
         }
     }
 
-    // Вспомогательные функции
     function escapeHtml(unsafe) {
         if (!unsafe) return '';
         return unsafe
@@ -319,13 +328,43 @@
             .replace(/'/g, "&#039;");
     }
 
-    // Инициализация
     document.addEventListener('DOMContentLoaded', function() {
         loadInitiatives(1);
         {% if 'user_id' in session %}
         loadMyInitiatives();
         {% endif %}
     });
+
+    function showDeleteAccountModal() {
+    document.getElementById('deleteAccountModal').style.display = 'block';
+    document.getElementById('delete-password').value = '';
+}
+
+    function hideDeleteAccountModal() {
+        document.getElementById('deleteAccountModal').style.display = 'none';
+    }
+
+
+    async function deleteMyAccount() {
+        const password = document.getElementById('delete-password').value;
+        
+        if (!password) {
+            alert('Введите пароль для подтверждения');
+            return;
+        }
+        
+        if (!confirm('Вы уверены, что хотите удалить свой аккаунт? Это действие невозможно отменить.')) {
+            return;
+        }
+        
+        try {
+            await jsonrpcCall('delete_my_account', { password: password });
+            alert('Аккаунт успешно удален');
+            window.location.href = '/rgz/';
+        } catch (error) {
+            alert('Ошибка: ' + error.message);
+        }
+    }
     </script>
 </body>
 </html>
