@@ -3,6 +3,8 @@ import datetime
 from flask_sqlalchemy import SQLAlchemy
 from lab8_db import db
 from os import path
+from flask_login import LoginManager
+from lab8_db.models import users
 
 from lab1 import lab1
 from lab2 import lab2
@@ -33,7 +35,14 @@ else:
   app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{db_path}'
 
 db.init_app(app)
-print("DATABASE URI:", app.config['SQLALCHEMY_DATABASE_URI'])
+
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = 'lab8.login'
+
+@login_manager.user_loader
+def load_user(user_id):
+    return users.query.get(int(user_id))
 
 app.register_blueprint(lab1)
 app.register_blueprint(lab2)
