@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block lab %}Лабораторная работа 9{% endblock %}
+
+{% block script %}
+<script src="{{ url_for('static', filename='lab9/main.js') }}"></script>
+{% endblock %}
+
+{% block main %}
+<h1>Поздравления</h1>
+<h1 style="text-align:center; color:#d00;">Новогодние подарки!</h1>
+<div id="field" style="position:relative; width:100%; height:600px; background-color: #f0f8ff;"> 
+</div>
+<div id="info" style="margin-top:20px; font-size:20px; text-align:center;">
+    Оставшихся неоткрытых коробок: <span id="remaining"></span>
+</div>
+<div id="message" style="margin-top:20px; font-size:24px; text-align:center; color:green;"></div>
+{% endblock %}

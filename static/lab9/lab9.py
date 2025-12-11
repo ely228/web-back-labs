@@ -3,18 +3,17 @@ import random
 
 lab9 = Blueprint('lab9', __name__)
 
-
 if not hasattr(lab9, "boxes"):
     lab9.boxes = []
     for i in range(10):
         lab9.boxes.append({
             "id": i,
             "x": random.randint(50, 900),
-            "y": random.randint(120, 500),
+            "y": random.randint(100, 500),
             "opened": False,
             "box_img": f"/static/lab9/box{i+1}.jpg",
             "gift_img": f"/static/lab9/gift{i+1}.jpg",
-            "text": f"Поздравление №{i+1}! С Новым годом и счастьем!"
+            "text": f"Поздравление №{i+1}! С Новым годом!"
         })
 
 @lab9.route("/lab9/")
