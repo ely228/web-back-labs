@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, session, current_app
+from flask import Blueprint, render_template, request, session, current_app, abort
 
 lab7 = Blueprint('lab7', __name__)
 
@@ -55,5 +55,14 @@ def get_films():
 @lab7.route('/lab7/rest-api/films/<int:id>', methods=['GET'])
 def get_film(id):
     if id < 0 or id >= len(films):  
-        return {"error": "Фильм не найден"}, 404
+        abort(404)
     return films[id]
+
+
+@lab7.route('/lab7/rest-api/films/<int:id>', methods=['DELETE'])
+def delete_film(id):
+    if id < 0 or id >= len(films):
+        abort(404)
+
+    deleted = films.pop(id)
+    return deleted
