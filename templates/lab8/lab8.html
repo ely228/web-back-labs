@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block lab %}Лабораторная работа 8{% endblock %}
+
+{% block main %}
+<div style="padding:8px 12px; font-size:14px;">WEB-программирование, часть 2. Лабораторная работа 8</div>
+
+<h1 style="margin-top:20px; text-align:center;">База знаний</h1>
+
+<div style="display:flex; justify-content:center; gap:12px; padding:12px 15px; border-radius:12px; align-items:center;">
+    <a href="/lab5/list" style="padding:8px 16px; border:none; border-radius:20px; text-decoration:none; font-weight:600; box-shadow:0 2px 6px black; transition:0.2s;">Список статей</a>
+
+    <a href="/lab5/create" style="padding:8px 16px; border:none; border-radius:20px; text-decoration:none; font-weight:600; box-shadow:0 2px 6px black; transition:0.2s;">Создать статью</a>
+
+    <a href="/lab5/login" style="padding:8px 16px; border:none; border-radius:20px; text-decoration:none; font-weight:600; box-shadow:0 2px 6px black; transition:0.2s;">Войти</a>
+
+    <a href="/lab5/register" style="padding:8px 16px; border:none; border-radius:20px; text-decoration:none; font-weight:600; box-shadow:0 2px 6px black; transition:0.2s;">Регистрация</a>
+</div>
+
+<div class="username" style="justify-content:center; align-items:center; text-align:center; margin-top:20px;">
+    {% if login %}
+        {{ login }}
+    {% else %}
+        Anonymous
+    {% endif %}
+</div>
+{% endblock %}
