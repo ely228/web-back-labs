@@ -7,6 +7,72 @@
 <script src="{{ url_for('static', filename='lab7/main.js')}}"></script>
 
 <style>
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        margin-top: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    th, td {
+        padding: 12px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    th {
+        background-color: #2e2e2e;
+        color: white;
+    }
+
+    tr:hover {
+        background-color: #f5f5f5;
+    }
+
+    tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
+    button {
+        padding: 8px 12px;
+        margin: 2px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: background 0.3s, transform 0.2s;
+    }
+
+    button:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    button[onclick="addFilm()"] {
+        position: fixed;
+        background-color: #878787;
+        color: white;
+    }
+
+    button[onclick="sendFilm()"] {
+        background-color: #9a999e;
+        color: white;
+    }
+
+    button[onclick="cancel()"] {
+        background-color: #f44336;
+        color: white;
+    }
+
+    button:not([onclick="addFilm()"]):not([onclick="sendFilm()"]):not([onclick="cancel()"]) {
+        background-color: #2196F3;
+        color: white;
+    }
+
+    button:active {
+        transform: translateY(0);
+    }
+
     .modal {
         display: none;
         position: fixed;
@@ -17,6 +83,7 @@
         height: 100%;
         overflow: auto;
         background-color: rgba(0, 0, 0, 0.55);
+        backdrop-filter: blur(2px); 
     }
 
     .modal-content {
@@ -31,18 +98,19 @@
 
     .modal-content label {
         display: block;
-        margin-top: 12px;
-        color: #495057;
-        font-weight: 600;
+        margin-top: 15px;
+        font-weight: bold;
+        color: gray;
     }
 
     .modal-content input,
     .modal-content textarea {
-        width: 90%;
-        padding: 6px;
+        width: 100%;
+        padding: 8px;
         margin-top: 5px;
-        border: 1px solid #adb5bd;
+        border: 1px solid gray;
         border-radius: 4px;
+        box-sizing: border-box; 
     }
 
     .modal-buttons {
@@ -55,6 +123,16 @@
         font-size: 0.9em;
         margin-top: 5px;
     }
+
+    .modal-content h2 {
+        margin-top: 0;
+        color: darkgray;
+    }
+
+    .modal-buttons button {
+        margin-left: 10px;
+    }
+    
 </style>
 
 {% endblock %}

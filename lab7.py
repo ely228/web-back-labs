@@ -60,6 +60,9 @@ def update_film(id):
     if film.get('description') == '':
         return {'description': 'Заполните описание'}, 400
     
+    if not film.get('title') and film.get('title_ru'):
+         film['title'] = film['title_ru']
+    
     films[id] = film
     return jsonify(films[id])
 
@@ -70,6 +73,9 @@ def add_film():
     
     if film.get('description') == '':
         return {'description': 'Заполните описание'}, 400
+    
+    if not film.get('title') and film.get('title_ru'):
+         film['title'] = film['title_ru']
 
     films.append(film)
     return jsonify(film)
