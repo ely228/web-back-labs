@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 
 {% block lab %}Лабораторная работа 9{% endblock %}
 
@@ -7,12 +7,46 @@
 {% endblock %}
 
 {% block main %}
-<h1>Поздравления</h1>
-<h1 style="text-align:center; color:#d00;">Новогодние подарки!</h1>
-<div id="field" style="position:relative; width:100%; height:600px; background-color: #f0f8ff;"> 
+<style>
+    body { background: linear-gradient(to bottom, #e6f2ff, #fff8f8); }
+    #field {
+        position: relative;
+        width: 1200px;
+        height: 680px;
+        margin: 30px auto;
+        background: url('/static/lab9/snow_bg.jpg') center/cover;
+        border: 5px solid #c00;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 0 30px rgba(200,0,0,0.5);
+    }
+    h1 { color: #c00; text-align: center; font-size: 3.5em; text-shadow: 3px 3px 6px white; }
+    #ded-moroz-btn {
+        display: none;
+        margin: 20px auto;
+        padding: 15px 30px;
+        font-size: 20px;
+        background: linear-gradient(#c00, #900);
+        color: white;
+        border: none;
+        border-radius: 50px;
+        cursor: pointer;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    }
+    #ded-moroz-btn:hover { background: #f00; transform: scale(1.05); }
+</style>
+
+<h1>Новогодние подарки!</h1>
+
+<div id="field"></div>
+
+<div style="text-align:center; font-size:24px; margin:15px;">
+    Осталось неоткрытых коробок: <span id="remaining" style="color:#c00; font-weight:bold;">10</span>
 </div>
-<div id="info" style="margin-top:20px; font-size:20px; text-align:center;">
-    Оставшихся неоткрытых коробок: <span id="remaining"></span>
-</div>
-<div id="message" style="margin-top:20px; font-size:24px; text-align:center; color:green;"></div>
+
+<div id="message" style="text-align:center; font-size:28px; color:#006400; min-height:60px;"></div>
+
+<button id="ded-moroz-btn" onclick="resetBoxes()">
+    Дед Мороз: Наполнить все коробки заново
+</button>
 {% endblock %}
