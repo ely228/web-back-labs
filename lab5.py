@@ -7,7 +7,7 @@ from os import path
 
 lab5 = Blueprint('lab5', __name__)
 
-@lab5.route('/lab5/')
+@lab5.route('/lab/')
 def lab():
     return render_template('lab5/lab5.html', login=session.get('login'))
 
@@ -33,7 +33,7 @@ def db_close(conn, cur):
     cur.close()
     conn.close()
 
-@lab5.route('/lab5/register', methods=['GET', 'POST'])
+@lab5.route('/lab5/registe', methods=['GET', 'POST'])
 def register():
     if request.method == 'GET':
         return render_template('lab5/register.html')
@@ -67,7 +67,7 @@ def register():
     db_close(conn, cur)
     return render_template('lab5/success.html', login=login)
 
-@lab5.route('/lab5/login', methods=['GET', 'POST'])
+@lab5.route('/lab5/logi', methods=['GET', 'POST'])
 def login():
     if request.method == 'GET':
         return render_template('lab5/login.html')
